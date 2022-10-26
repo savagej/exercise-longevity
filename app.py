@@ -4,7 +4,7 @@ import data
 
 st.title('Exercise for Longevity')
 
-vo2 = st.number_input("VO2max", help="this is helpful")
+vo2 = st.number_input("VO2max", help="Most smartwatches will calculate your VO2max from exercise data, fitbit and apple warch call it your 'cardio fitness'. You can use [this site]{https://www.omnicalculator.com/sports/vo2-max-runners?c=GBP&v=y:1,distance:5!km,time:1500!minsec} to calculate your VO2max from a recent 5k race ")
 age = st.number_input("age", 18, 80)
 sex = st.selectbox("Sex", ('Male', 'Female'))
 
