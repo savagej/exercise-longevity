@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 import plotly.express as px
 import matplotlib.pyplot as plt
@@ -21,6 +22,26 @@ vs = " vs "
 
 if st.button("Calculate"):
     st.header(f"You are in the {group} fitness group")
+    cutoffs_in_vo2 = [v*3.5 for v in cutoff]
+    diffs = []
+    for i,v in enumerate(cutoffs_in_vo2):
+        if i == 0:
+            diffs.append(v)
+        else:
+            diffs.append(v - cutoffs_in_vo2[i-1])
+    df_cutoff = pd.DataFrame([cutoffs_in_vo2, diffs], index=["vO2max_cutoff", "VO2max"]).T
+    df_cutoff["_"] = "_"
+    df_cutoff["fitness_group"] = data.groups[:-1]
+    px_fig = px.bar(
+        df_cutoff, x="VO2max", y="_",
+        color="fitness_group", orientation="h",
+        hover_name="fitness_group", hover_data={"VO2max": False, "_": False, "vO2max_cutoff": True, "fitness_group": True},
+        range_x=(15, max(16.2*3.5, vo2+10))
+    )
+    px_fig.add_vline(vo2, annotation_text="Your vo2max")
+    px_fig.update_yaxes(visible=False)
+    st.plotly_chart(px_fig)
+    st.caption(f"Your VO2max of {vo2} in relation to the four largest groups in the study. Any VO2max higher than the 'High' group is the 'Elite' group, which made up the top 5% of study participants")
 
     hazard_ratios = dict()
     for g in range(group_index + 1, len(data.groups)):
