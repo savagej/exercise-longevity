@@ -4,45 +4,24 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import data
 
+st.set_page_config(
+    page_title="Exercise for longevity",
+    page_icon=":runner:"
+)
+
 st.title('Exercise for Longevity')
 st.write("""
-IN 2018 a [study was published](https://doi.org/10.1001/jamanetworkopen.2018.3605) which looked at the the association 
-between fitness and long-term mortality. Between 1991 and 2014, they examined over 120,000 patients at 
-Cleveland Clinic, determining their fitness levels and noting their age, sex and relevant conditions e.g. smoking, diabetes. 
-The patients were then tracked for the rest of the study (on average for 8.5 years). 11% of these patients died in the 23 years 
-of the study, which allowed the authors to examine the different risk levels for various levels of fitness and compare
-them to the other conditions the patients had.
+This website is an attempt to highlight how much impact exercise can have on our health and longevity when compared
+to any other variable within our control like our diet and smoking, or when compared to common chronic diseases.
 
-The patients were bucketed into 4 fitness levels for each sex and age group, `Low`, `Below Average`, `Above Average`, and `High`.
-The `High` group was subdivided again, with the very top 2.4% of patients getting put in the `Elite` group.
+The intent is not to add an additional worry about our lifestyle choices, but to show that if we only have time or 
+headspace to focus on one aspect of our life for longevity, consistent and enjoyable exercise should be the majority of people's focus.
 
-
-""")
-df_groups = pd.DataFrame([25,25,25,22.6,2.4], columns=["percentile"])
-df_groups["_"] = "_"
-df_groups["fitness_group"] = data.groups
-st.plotly_chart(px.bar(
-    df_groups, x="percentile", y="_",
-    color="fitness_group", orientation="h",
-    hover_name="fitness_group",
-    hover_data={"percentile": False, "_": False,  "fitness_group": False},
-))
-st.write("""
-Unsurprisingly there was a negative correlation between the fitness groups and death during the study, but the size 
-of the difference was shocking to me, with almost 25% of the `Low` group dying during the study compared to only 5% of 
-the `High` group.  
-The authors were able to calculate the relative risk of being in one fitness group vs another, and compared this risk 
-to the other conditions present in the patient e.g. diabetes, smoking, or kidney failure. At all levels, the 
-increased level of mortality compared to the fitness levels above was similar to or greater than these diseases we worry 
-a lot about. 
-
-As a doctor focused on Longevity has said [on twitter](https://twitter.com/PeterAttiaMD/status/1499408138658668544) based on his
-reading of this study our first,second, and third priorities for longevity should be on well formulated exercise to increase our fitness
-
+Enter your details in the form to the left to find out your fitness group and comparisons between the relative risk of your fitness group with others.
 """)
 
 with st.sidebar:
-    st.header("Title")
+    st.header("What fitness group are you in?")
     st.write("Enter your details below to calculate your fitness group")
     vo2 = st.number_input("VO2max", help="Most smartwatches will calculate your VO2max from exercise data (fitbit and apple watch call it your 'cardio fitness'). You can use [this site](https://www.omnicalculator.com/sports/vo2-max-runners?c=GBP&v=y:1,distance:5!km,time:1500!minsec) to calculate your VO2max from a recent 5k race ")
     age = st.number_input("age", 18, 80)
@@ -138,3 +117,40 @@ if butt:
         st.caption("Other medical conditions data is from the same study, diet data comes from [this paper](https://www.bmj.com/lookup/doi/10.1136/bmj.m688) and so is not as directly comparable (different population etc.)")
     else:
         st.write("Congrats, keep up the good work")
+
+with st.expander("Expand for background"):
+    st.write("""
+    IN 2018 a [study was published](https://doi.org/10.1001/jamanetworkopen.2018.3605) which looked at the the association 
+    between fitness and long-term mortality. Between 1991 and 2014, they examined over 120,000 patients at 
+    Cleveland Clinic, determining their fitness levels and noting their age, sex and relevant conditions e.g. smoking, diabetes. 
+    The patients were then tracked for the rest of the study (on average for 8.5 years). 11% of these patients died in the 23 years 
+    of the study, which allowed the authors to examine the different risk levels for various levels of fitness and compare
+    them to the other conditions the patients had.
+
+    The patients were bucketed into 4 fitness levels for each sex and age group, `Low`, `Below Average`, `Above Average`, and `High`.
+    The `High` group was subdivided again, with the very top 2.4% of patients getting put in the `Elite` group.
+
+
+    """)
+    df_groups = pd.DataFrame([25, 25, 25, 22.6, 2.4], columns=["percentile"])
+    df_groups["_"] = "_"
+    df_groups["fitness_group"] = data.groups
+    st.plotly_chart(px.bar(
+        df_groups, x="percentile", y="_",
+        color="fitness_group", orientation="h",
+        hover_name="fitness_group",
+        hover_data={"percentile": False, "_": False, "fitness_group": False},
+    ))
+    st.write("""
+    Unsurprisingly there was a negative correlation between the fitness groups and death during the study, but the size 
+    of the difference was shocking to me, with almost 25% of the `Low` group dying during the study compared to only 5% of 
+    the `High` group.  
+    The authors were able to calculate the relative risk of being in one fitness group vs another, and compared this risk 
+    to the other conditions present in the patient e.g. diabetes, smoking, or kidney failure. At all levels, the 
+    increased level of mortality compared to the fitness levels above was similar to or greater than these diseases we worry 
+    a lot about. 
+
+    As a doctor focused on Longevity has said [on twitter](https://twitter.com/PeterAttiaMD/status/1499408138658668544) based on his
+    reading of this study our first,second, and third priorities for longevity should be on well formulated exercise to increase our fitness
+
+    """)
