@@ -6,7 +6,8 @@ import data
 
 st.set_page_config(
     page_title="Exercise for longevity",
-    page_icon=":runner:"
+    page_icon=":runner:",
+    menu_items={"Report a Bug": "mailto:john@johnsavage.net", "Get help": None, "About": "Made by John Savage 2022. Contact: john@johnsavage.net"}
 )
 
 st.title('Exercise for Longevity')
@@ -86,35 +87,29 @@ if butt:
         st.markdown("""---""")
         st.subheader("Comparison to other things that affect early death")
         st.write("This plot shows the comparison to other fitness groups in context of other medical conditions or poor diets")
-        fig, ax = plt.subplots()
-        ax.set_xlim([1,6])
-        x_values = [x[0] for x in hazard_ratios.values()]
-        y_values = [1 for x in hazard_ratios.values()]
-        ax.stem(x_values, y_values)
-        for x, y, label in zip(x_values, y_values, hazard_ratios.keys()):
-            plt.annotate(label, xy=(x, y), xytext=(0, 5), textcoords='offset points', ha='center', va='top',
-                         rotation=60)
 
-        comorbidities = ([1.21, 1.41, 2.8], [0.66, 0.66, 0.66], ["Hypertension", "Smoking", "Kidney Failure"])
-        ax.stem(comorbidities[0], comorbidities[1], linefmt='C1-')
-        for x, y, label in zip(*comorbidities):
-            plt.annotate(label, xy=(x, y), xytext=(0, 5), textcoords='offset points', ha='center', va='top',
-                         rotation=60)
+        df_other_hazard_ratios = pd.DataFrame(data.other_hazard_ratios, columns=["hazard_ratio", "name", "type", "err_low", "err_high"])
+        df_exercise = pd.DataFrame(zip(
+            [x[0] for x in hazard_ratios.values()],
+            hazard_ratios.keys(),
+            ["fitness" for x in hazard_ratios.values()],
+            [x[1] for x in hazard_ratios.values()],
+            [x[2] for x in hazard_ratios.values()],
+        ), columns=["hazard_ratio", "name", "type", "err_low", "err_high"])
 
-        diet = ([1.16, 1.45], [0.33, 0.33], ["Too much sugar", "Too much sat. fat"])
-        ax.stem(diet[0], diet[1], linefmt='C2-')
-        for x, y, label in zip(*diet):
-            plt.annotate(label, xy=(x, y), xytext=(0, 5), textcoords='offset points', ha='center', va='top',
-                         rotation=60)
+        df_plot = pd.concat([df_other_hazard_ratios, df_exercise])
+        df_plot["err_plus"] = df_plot["err_high"] - df_plot["hazard_ratio"]
+        df_plot["err_minus"] = df_plot["hazard_ratio"] - df_plot["err_low"]
 
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['bottom'].set_visible(False)
-        ax.spines['left'].set_visible(False)
-        ax.get_yaxis().set_ticks([])
-        st.pyplot(fig)
-        st.caption("Blue bars show the hazard ratios for your fitness group compared to the higher fitness groups. Orange bars show other medical conditions seen in the study population. Green bars show hazard ratios for bad diets in a different study for a reference.")
+        fig2 = px.scatter(df_plot, x="hazard_ratio", y="name", color="type",
+                            # title="Gender Earnings Disparity",
+                            labels={"hazard_ratio": "Increase in likelihood of early death", "name": "Risks", "type":"Risk type"},
+                            error_x="err_plus",
+                            error_x_minus="err_minus"
+                          )
+        st.plotly_chart(fig2)
         st.caption("Other medical conditions data is from the same study, diet data comes from [this paper](https://www.bmj.com/lookup/doi/10.1136/bmj.m688) and so is not as directly comparable (different population etc.)")
+
     else:
         st.write("Congrats, keep up the good work")
 

@@ -42,3 +42,14 @@ for s in ["Male", "Female"]:
     for k, v in data_dict.items():
         start, end = [int(x) for x in k.split("-")]
         full_data[s].update({age: v for age in range(start, end + 1)})
+
+other_hazard_ratios = [
+    [1.21, "Hypertension", "medical condition", 1.16, 1.25],
+    [1.40, "Diabetes", "medical condition", 1.34, 1.46],
+    [1.41, "Smoking", "medical condition", 1.36, 1.46],
+    [2.80, "Kidney Failure", "medical condition", 2.53, 3.05],
+    [1.16, "Too much sugar", "dietary", 0.9, 1.5],
+    [1.45, "Too much saturated fat", "dietary", 1.3, 1.7],
+    [1.50, "Too little fibre", "dietary", 1.3, 1.7]
+
+]
