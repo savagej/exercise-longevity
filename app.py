@@ -18,7 +18,7 @@ to any other variable within our control like our diet and smoking, or when comp
 The intent is not to add an additional worry about our lifestyle choices, but to show that if we only have time or 
 headspace to focus on one aspect of our life for longevity, consistent and enjoyable exercise should be the majority of people's focus.
 
-Enter your details in the form to the left to find out your fitness group and comparisons between the relative risk of your fitness group with others.
+This is all based on an interesting study which you can learn about in the panel below, but you can simply enter your details in the form to the left to find out your fitness group and comparisons between the relative risk of your fitness group with others.
 """)
 
 with st.sidebar:
