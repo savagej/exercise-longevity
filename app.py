@@ -110,6 +110,23 @@ if butt:
         st.plotly_chart(fig2)
         st.caption("Other medical conditions data is from the same study, diet data comes from [this paper](https://www.bmj.com/lookup/doi/10.1136/bmj.m688) and so is not as directly comparable (different population etc.)")
 
+        if group == "High":
+            st.write("Your group were already the highest 25% of people in the study, but even so it is clear that continuing to increase fitness levels to `Elite` levels produces longevity benefits, though the error bars are quite large.")
+        elif group == "Above Average":
+            st.write("For example, comparing your group to those in the `High` fitness group, the changed risk of mortality is comparable to smoking, diabetes, high saturated fat or very low fibre diets")
+        elif group == "Below Average":
+            st.write("For example, comparing your group to those in the `Above Average` fitness group, the changed risk of mortality is comparable to smoking, diabetes, high saturated fat or very low fibre diets")
+        elif group == "Low":
+            st.write("For example, comparing your group to those in the `Below Average` fitness group, the changed risk of mortality is greater than that of smoking, diabetes, high saturated fat or very low fibre diets")
+            st.write("Comparing to the `Above Average` fitness group, the changed risk of mortality is comparable to Kidney Failure (End stage renal disease, when the kidneys completely stop working and require transplants)")
+            st.write("People in the `High` fitness group were almost 4 times less likely to die during the study than the `Low` group")
+        st.subheader("What's next")
+        st.write("Missing a way to help understand how much exercise and of what type will result in a given fitness bucket.")
+        st.write("""
+        The recommendation for how much exercise per week by longevity experts is exercise at a "conversational" level, your breathing should be faster, but you could easily hold a conversation with someone.
+    - For a beginner: ~2 hours a week is a good place to start
+    - Ideally: 3-4 hours per week 
+    """)
     else:
         st.write("Congrats, keep up the good work")
 
