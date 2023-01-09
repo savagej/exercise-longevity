@@ -60,6 +60,8 @@ if butt:
     )
     px_fig.add_vline(vo2, annotation_text="Your vo2max")
     px_fig.update_yaxes(visible=False)
+    px_fig.layout.xaxis.fixedrange = True
+    px_fig.layout.yaxis.fixedrange = True
     st.plotly_chart(px_fig, use_container_width=True)
     st.caption(f"Your VO2max of {vo2} in relation to the four largest groups in the study. Any VO2max higher than the 'High' group is the 'Elite' group, which made up the top 2.4% of study participants")
 
@@ -108,6 +110,8 @@ if butt:
                             error_x="err_plus",
                             error_x_minus="err_minus"
                           )
+        fig2.layout.xaxis.fixedrange = True
+        fig2.layout.yaxis.fixedrange = True
         st.plotly_chart(fig2, use_container_width=True)
         st.caption("Other medical conditions data is from the same study, diet data comes from [this paper](https://www.bmj.com/lookup/doi/10.1136/bmj.m688) and so is not as directly comparable (different population etc.)")
 
@@ -148,12 +152,15 @@ with st.expander("Expand for background"):
     df_groups = pd.DataFrame([25, 25, 25, 22.6, 2.4], columns=["percentile"])
     df_groups["_"] = "_"
     df_groups["fitness_group"] = data.groups
-    st.plotly_chart(px.bar(
+    fig3 = px.bar(
         df_groups, x="percentile", y="_",
         color="fitness_group", orientation="h",
         hover_name="fitness_group",
         hover_data={"percentile": False, "_": False, "fitness_group": False},
-    ), use_container_width=True)
+    )
+    fig3.layout.xaxis.fixedrange = True
+    fig3.layout.yaxis.fixedrange = True
+    st.plotly_chart(fig3, use_container_width=True, **{"config": {"responsive": False}})
     st.write("""
     Unsurprisingly there was a negative correlation between the fitness groups and death during the study, but the size 
     of the difference was shocking to me, with almost 25% of the `Low` group dying during the study compared to only 5% of 
