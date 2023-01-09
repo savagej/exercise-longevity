@@ -18,10 +18,11 @@ to any other variable within our control like our diet and smoking, or when comp
 The intent is not to add an additional worry about our lifestyle choices, but to show that if we only have time or 
 headspace to focus on one aspect of our life for longevity, consistent and enjoyable exercise should be the majority of people's focus.
 
-This is all based on an interesting study which you can learn about in the panel below, but you can simply enter your details in the form to the left to find out your fitness group and comparisons between the relative risk of your fitness group with others.
+This is all based on an interesting study which you can learn about in the panel at the bottom of the page, 
+but you can simply enter your details in the form to find out your fitness group and comparisons between the relative risk of your fitness group with others.
 """)
 
-with st.sidebar:
+with st.expander("Input", expanded=True):
     st.header("What fitness group are you in?")
     st.write("Enter your details below to calculate your fitness group")
     vo2 = st.number_input("VO2max", help="Most smartwatches will calculate your VO2max from exercise data (fitbit and apple watch call it your 'cardio fitness'). You can use [this site](https://www.omnicalculator.com/sports/vo2-max-runners?c=GBP&v=y:1,distance:5!km,time:1500!minsec) to calculate your VO2max from a recent 5k race ")
