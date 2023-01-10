@@ -10,7 +10,7 @@ st.set_page_config(
     menu_items={"Report a Bug": "mailto:john@johnsavage.net", "Get help": None, "About": "Made by John Savage 2022. Contact: john@johnsavage.net"}
 )
 
-st.title('Exercise for Longevity')
+st.title('Is exercise the best thing we can do to live longer?')
 st.write("""
 This website is an attempt to highlight how much impact exercise can have on our health and longevity when compared
 to any other variable within our control like our diet and smoking, or when compared to common chronic diseases.
@@ -28,6 +28,7 @@ with st.expander("Input", expanded=True):
     vo2 = st.number_input("VO2max", help="Most smartwatches will calculate your VO2max from exercise data (fitbit and apple watch call it your 'cardio fitness'). You can use [this site](https://www.omnicalculator.com/sports/vo2-max-runners?c=GBP&v=y:1,distance:5!km,time:1500!minsec) to calculate your VO2max from a recent 5k race ")
     age = st.number_input("age", 18, 80)
     sex = st.selectbox("Sex", ('Male', 'Female'))
+    error_bars = st.checkbox("Show error bars on plot?")
     butt = st.button("Calculate")
 
 met = round(vo2 / 3.5, 2)
@@ -74,7 +75,7 @@ if butt:
     if len(hazard_ratios) > 0:
         # Results tabs
         st.subheader("Comparison to other fitness groups")
-        st.write("In the tabs below you can see the different hazard ratios for your fitness group compared to the higher fitness groups")
+        st.write("In the tabs below you can see the increased risk for early death for your fitness group compared to the higher fitness groups")
         tabs = st.tabs(hazard_ratios.keys())
         for (t, hr) in zip(tabs, hazard_ratios.keys()):
             with t:
@@ -104,12 +105,19 @@ if butt:
         df_plot["err_plus"] = df_plot["err_high"] - df_plot["hazard_ratio"]
         df_plot["err_minus"] = df_plot["hazard_ratio"] - df_plot["err_low"]
 
-        fig2 = px.scatter(df_plot, x="hazard_ratio", y="name", color="type",
-                            # title="Gender Earnings Disparity",
+        fig2 = (px.scatter(df_plot, x="hazard_ratio", y="name", color="type",
+                            title="Increase in likelihood of early death",
                             labels={"hazard_ratio": "Increase in likelihood of early death", "name": "Risks", "type":"Risk type"},
                             error_x="err_plus",
                             error_x_minus="err_minus"
                           )
+                if error_bars else
+                    px.scatter(df_plot, x="hazard_ratio", y="name", color="type",
+                           title="Increase in likelihood of early death",
+                           labels={"hazard_ratio": "Increase in likelihood of early death", "name": "Risks",
+                                   "type": "Risk type"}
+                           )
+                )
         fig2.layout.xaxis.fixedrange = True
         fig2.layout.yaxis.fixedrange = True
         st.plotly_chart(fig2, use_container_width=True)
@@ -135,7 +143,7 @@ if butt:
     else:
         st.write("Congrats, keep up the good work")
 
-with st.expander("Expand for background"):
+with st.expander("Click here for more information about the study"):
     st.write("""
     IN 2018 a [study was published](https://doi.org/10.1001/jamanetworkopen.2018.3605) which looked at the the association 
     between fitness and long-term mortality. Between 1991 and 2014, they examined over 120,000 patients at 
